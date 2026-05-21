@@ -1,24 +1,29 @@
-# Analisis Rental Film Sakila 🎬
+# Analisis Rental Film Sakila 
+
 Repositori ini berisi laporan analisis mendalam terhadap database Sakila menggunakan R-Markdown. Analisis mencakup Actor ROI, Market Concentration, dan RFM Segmentation.
 
 # 🔗 Link Laporan (GitHub Pages)
+
 👉 [Klik di sini untuk melihat laporan interaktifnya](https://nfp-05.github.io/SIM_CM1/)
 
-# 🚀 Fitur Utama
-Actor ROI: Mengidentifikasi aktor paling menguntungkan bagi bisnis.
+# Fitur Utama
 
-Geospatial Analysis: Pemetaan pendapatan berdasarkan negara.
+-   Actor ROI: Mengidentifikasi aktor paling menguntungkan bagi bisnis.
 
-RFM Analysis: Segmentasi pelanggan menjadi Champions, Loyal, hingga At Risk.
+-   Geospatial Analysis: Pemetaan pendapatan berdasarkan negara.
 
-# 🛠️ Teknologi yang Digunakan
-Bahasa: R
+-   RFM Analysis: Segmentasi pelanggan menjadi Champions, Loyal, hingga At Risk.
 
-Database: MySQL (Sakila Database)
+# Teknologi yang Digunakan
 
-Library Utama: tidyverse, kableExtra, scales, DBI
+-   Bahasa: R
+
+-   Database: MySQL (Sakila Database)
+
+-   Library: odbc, DBI, tidyverse, scales, knitr, kableExtra, and treemapify
 
 # 📁 Struktur Folder
+
 ```text
 ├── images/            
 │   └── Sakila_ERD_Diag.png
