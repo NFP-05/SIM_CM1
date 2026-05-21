@@ -14,7 +14,7 @@ Repositori ini berisi laporan analisis mendalam terhadap database Sakila menggun
 
 -   RFM Analysis: Segmentasi pelanggan menjadi Champions, Loyal, hingga At Risk.
 
-# Teknologi yang Digunakan
+# Library, Database, dan Bahasa yang Digunakan
 
 -   Bahasa: R
 
@@ -33,4 +33,4 @@ Repositori ini berisi laporan analisis mendalam terhadap database Sakila menggun
 ├── .gitignore
 └── README.md  
 ```
-images/: Gambar pendukung seperti ERD.
+-   images/: Gambar pendukung seperti ERD.
