@@ -1,11 +1,11 @@
 ---
-title: "**Analisis Performa Revenue dan Pola Rental Film pada Database Sakila**"
+title: "**Data-Driven Business Insights: Mengungkap Pola Rental, Geografi Pasar, dan Segmentasi RFM pada Database Sakila**"
 author: "**Naufal F. Pellu - M0724077 - F**"
 date: "**`r format(Sys.time(), '%d %B %Y')`**"
 output:  
   html_document:
-    theme: flatly
-    highlight: default
+    theme: default
+    highlight: kate
     css: styles.css
     toc: true
     toc_float:
@@ -14,11 +14,6 @@ output:
     toc_depth: 3
     number_sections: true
     code_folding: show
-    df_print: paged
-  
-header-includes:
-  - \usepackage{ragged2e}
-
 ---
 
 ```{r setup, include=FALSE}
@@ -34,7 +29,7 @@ knitr::opts_chunk$set(
 
 ---
 
-# Pendahuluan {.tabset}
+# Pendahuluan 
 
 ## Deskripsi Dataset
 
@@ -75,7 +70,6 @@ Gambar ERD (Entity Diagram Relationship) pada database sakila
 | `customer` | Data pelanggan | `customer_id`, `address_id` |
 | `address`, `city`, `country` | Data hierarki lokasi | `address_id`, `city_id`, `country_id` |
 
-
 ---
 
 # Persiapan Data
@@ -83,30 +77,26 @@ Gambar ERD (Entity Diagram Relationship) pada database sakila
 ## Library
 
 ```{r libraries, message=FALSE, warning=FALSE}
-# ── Library utama ──────────────────────────────────────────────
+# Library utama
 library(odbc)
 library(DBI)
 library(tidyverse)
 library(scales)
-library(lubridate)
 library(knitr)
 library(kableExtra)
-library(RColorBrewer)
-library(ggrepel)      
-library(treemapify)   
-library(patchwork)
+library(treemapify)
 ```
 
 ## Koneksi ke Database
 
 ```{r connection, message=FALSE, warning=FALSE}
-# Melakukan koneksi 
+# Melakukan koneksi
 con <- DBI::dbConnect(odbc::odbc(),
   Driver = "MySQL ODBC 8.0 ANSI Driver",
   Server = "127.0.0.1",
   Database = "sakila",
   UID = "root",
-  PWD = "nfp002556()-#$", 
+  PWD = "nfp002556()-#$",
   Port = 3306
 )
 
@@ -234,9 +224,9 @@ df_rfm_raw <- df_rfm_base %>%
 df_rfm_summary <- df_rfm_raw %>%
   group_by(segment) %>%
   summarise(n_pelanggan=n(), avg_recency=round(mean(recency),1),
-            avg_frequency=round(mean(frequency),1),
-            avg_monetary=round(mean(monetary),2),
-            total_revenue=round(sum(monetary),2), .groups="drop") %>%
+            avg_frequency=round(mean(frequency), 1),
+            avg_monetary=round(mean(monetary), 2),
+            total_revenue=round(sum(monetary), 2), .groups="drop") %>%
   mutate(revenue_pct = total_revenue/sum(total_revenue)*100) %>%
   arrange(desc(total_revenue))
 ```
@@ -282,22 +272,23 @@ rata_film       <- round(mean(df_actor_roi$jumlah_film), 1)
 
 ## Tabel Actor ROI
 
+<div class="custom-table">
 ```{r tabel_actor}
 df_actor_roi %>%
   select(nama_aktor, jumlah_film, jumlah_rental, total_revenue, revenue_per_film) %>%
   knitr::kable(
     format = "html", 
-    escape = FALSE, # Agar simbol $ tidak merusak header
+    escape = FALSE, 
     digits = 2,
-    col.names = c("Nama Aktor", "Jml Film", "Jml Rental", "Total Revenue (USD)", "Revenue/Film (USD)"),
+    col.names = c("Nama Aktor", "Jumlah Film", "Jumlah Rental", "Total Revenue (USD)", "Revenue/Film (USD)"),
     caption = "Tabel 1. Top 20 Aktor berdasarkan Total Revenue"
   ) %>%
   kableExtra::kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
     full_width = TRUE
   ) %>%
   kableExtra::row_spec(1:3, bold = TRUE, background = "#d6eaf8")
 ```
+</div>
 
 ## Visualisasi: Lollipop Chart Actor ROI
 
@@ -337,10 +328,14 @@ df_actor_roi %>%
 <div class="interpretasi">
 <h4>💡 Interpretasi — Actor ROI</h4>
 
-- Terdapat **variasi signifikan** dalam revenue antar aktor meski semua berada di top 20 — menunjukkan bahwa popularitas film (dan bukan sekadar jumlah film) menjadi penentu utama ROI.
-- Aktor dengan **revenue per film tinggi** (warna biru tua pada bubble chart) adalah aktor yang paling efisien: sedikit film tapi menghasilkan banyak transaksi rental.
-- Tidak terdapat korelasi linear sempurna antara jumlah film dan total revenue — beberapa aktor dengan **lebih sedikit film** justru menghasilkan revenue lebih tinggi, mengindikasikan bahwa **kualitas dan popularitas film** lebih berpengaruh daripada kuantitas.
-- **Implikasi strategis:** kontrak dengan aktor ber-ROI tinggi per film harus diprioritaskan untuk menjaga efisiensi portofolio konten Sakila.
+Analisis performa finansial berbasis kontribusi aktor pada database Sakila mengonfirmasi bahwa **kuantitas produksi film bukanlah prediktor tunggal keberhasilan finansial**. Ditemukan disparitas yang jelas antara popularitas volume dengan efisiensi pengembalian investasi (ROI), dengan rincian analisis sebagai berikut:
+
+1. **Paradoks Kuantitas vs Efisiensi Finansial:** Data pada tabel menunjukkan bahwa aktor yang memimpin dari sisi absolut total revenue tertinggi (didorong oleh produktivitasnya yang tinggi dalam membintangi banyak judul film) belum tentu memiliki efisiensi pengembalian terbaik. Banyak judul film justru berpotensi meningkatkan biaya pengadaan jika tidak diimbangi dengan rata-rata utilitas penyewaan yang tinggi per proyeknya.
+
+2. **Identifikasi Aset Strategis Utama (High-ROI Drivers):** Sebaliknya, aktor-aktor yang menduduki peringkat atas pada metrik *Revenue per Film* (seperti yang memiliki rata-rata menghasilkan di atas USD 70+ per film) muncul sebagai bintang dengan efisiensi terbaik. Bagi manajemen Sakila, aktor dalam kategori inilah yang menjadi penggerak margin keuntungan (*profit margin drivers*) yang sesungguhnya karena mampu menghasilkan pendapatan maksimal dengan jumlah inventori film yang lebih efisien.
+
+3. **Implikasi Strategis Pengadaan Konten (Content Acquisition):** Hasil evaluasi ini memberikan rekomendasi kuat bagi tim *purchasing* dan pengadaan hak siar film. Kontrak atau lisensi film baru ke depan harus diprioritaskan pada karya-karya yang dibintangi oleh aktor dengan nilai *Revenue per Film* yang tinggi. Strategi ini akan meminimalkan biaya (mengurangi penimbunan judul film yang kurang produktif), namun tetap mampu mengoptimalkan perputaran revenue secara maksimal.
+
 </div>
 
 ---
@@ -391,9 +386,9 @@ df_market %>%
              label = paste0(country, "\n$", comma(total_revenue)))) +
   geom_treemap() +
   geom_treemap_text(
-    color     = "white",
+    color     = "black",
     place     = "centre",
-    size      = 11,
+    size      = 11.5,
     fontface  = "bold",
     reflow    = TRUE
   ) +
@@ -456,6 +451,7 @@ ggplot(df_market_pareto, aes(x = label_country)) +
 
 ## Tabel: Rata-rata Revenue per Pelanggan per Negara
 
+<div class="custom-table">
 ```{r tabel_market}
 df_market %>%
   mutate(revenue_pct = round(total_revenue / sum(total_revenue) * 100, 2)) %>%
@@ -472,6 +468,7 @@ df_market %>%
   ) %>%
   row_spec(1:3, bold = TRUE, background = "#d6eaf8")
 ```
+</div>
 
 <div class="interpretasi">
 <h4>🌍 Interpretasi — Market Concentration</h4>
@@ -552,6 +549,7 @@ df_rfm_raw <- df_rfm_base %>%
 
 ## Tabel Ringkasan Segmen RFM
 
+<div class="custom-table">
 ```{r tabel_rfm}
 warna_seg <- c(
   "Champions"          = "#1e8449",
@@ -563,22 +561,22 @@ warna_seg <- c(
 
 df_rfm_summary %>%
   mutate(revenue_pct = round(revenue_pct, 1)) %>%
-  kable(
+  knitr::kable(
     digits    = 2,
     col.names = c("Segmen", "Jml Pelanggan", "Avg Recency (hari)",
                   "Avg Frequency", "Avg Monetary (USD)",
                   "Total Revenue (USD)", "Revenue (%)"),
     caption   = "Tabel 3. Ringkasan Segmentasi RFM Pelanggan Sakila"
   ) %>%
-  kable_styling(
-    bootstrap_options = c("striped","hover","condensed","responsive"),
+  kableExtra::kable_styling(
     full_width = TRUE
   ) %>%
-  row_spec(which(df_rfm_summary$segment == "Champions"),
-           bold = TRUE, background = "#d5f5e3", color = "#1e8449") %>%
-  row_spec(which(df_rfm_summary$segment == "At Risk"),
-           background = "#fde8e8", color = "#c0392b")
+  kableExtra::row_spec(which(df_rfm_summary$segment == "Champions"),
+                       bold = TRUE, background = "#d5f5e3", color = "#1e8449") %>%
+  kableExtra::row_spec(which(df_rfm_summary$segment == "At Risk"),
+                       background = "#fde8e8", color = "#c0392b")
 ```
+</div>
 
 ## Visualisasi: Distribusi Segmen
 
@@ -689,7 +687,13 @@ ggplot(df_rfm_sample,
 
 - <span class="rfm-badge rfm-lost">Lost / Hibernating</span> — Pelanggan tidak aktif dalam waktu lama. Upaya reakuisisi memerlukan biaya lebih tinggi; perlu dipertimbangkan apakah lebih efisien mengakuisisi pelanggan baru.
 
-**Dari scatter plot RFM**, terlihat jelas pemisahan visual antara Champions (kiri-atas: recency baru, frekuensi tinggi) dan Lost (kanan-bawah), mengkonfirmasi validitas segmentasi yang dihasilkan.
+Berdasarkan hasil pemodelan dan visualisasi data RFM, beberapa insight strategis yang dapat dirangkum adalah sebagai berikut:
+
+1. **Validasi Kluster Visual:** Melalui *scatter plot* distribusi nilai RFM, terlihat pemisahan kelompok pelanggan yang cukup jelas. Kelompok <span class="rfm-badge rfm-champions">Champions</span> mengelompok secara konsisten di area **kiri-atas** (menandakan *Recency* yang sangat baru dan *Frequency* yang tinggi). Sementara itu, segmen <span class="rfm-badge rfm-lost">Lost / Hibernating</span> terlihat menumpuk di area **kiri-bawah**, mencerminkan kelompok pelanggan dengan frekuensi rental rendah yang rentan beralih menjadi sepenuhnya tidak aktif jika tidak segera distimulasi.
+
+2. **Anatomi Segmen Terbesar (Potensi Menengah):** Mayoritas basis pelanggan Sakila berada pada kategori <span class="rfm-badge rfm-potential">Potential Loyalist</span> dan *Loyal Customers*. Mereka memiliki *Recency* yang baik (aktif baru-baru ini), namun frekuensi rentalnya belum maksimal. Ini adalah peluang besar untuk dikonversi menjadi *Champions* melalui program loyalitas atau promosi berbasis kurasi film terlaris.
+
+3. **Sinyal Bahaya Kritis (At Risk):** Kelompok <span class="rfm-badge rfm-atrisk">At Risk</span> terlihat jelas di area **kanan-atas** grafik. Posisi ini mengonfirmasi adanya risiko retensi yang kritis—mereka adalah pelanggan yang memiliki riwayat *Frequency* tinggi di masa lalu, namun nilai *Recency*-nya bergerak menjauh ke kanan (sudah lama tidak merental). Kelompok berharga ini membutuhkan kampanye *win-back* atau insentif khusus berupa penawaran terbatas sesegera mungkin sebelum mereka berhenti berlangganan secara total.
 </div>
 
 ---
@@ -701,8 +705,9 @@ ggplot(df_rfm_sample,
 **Ringkasan Tiga Dimensi Analisis:**
 
 ### 🎭 Actor ROI
-- Terdapat **variasi besar** dalam kontribusi revenue antar aktor — kuantitas film bukan satu-satunya penentu ROI.
-- Aktor dengan **revenue per film tinggi** adalah aset strategis utama yang harus diprioritaskan dalam kontrak ke depan.
+- **Efisiensi vs Kuantitas:** Kuantitas produksi film bukan penentu tunggal ROI; aktor dengan produktivitas tinggi secara absolut belum tentu memiliki rata-rata pendapatan per film yang efisien.
+- **Aset Strategis Utama:** Aktor yang mencatatkan rata-rata *revenue per film* tinggi (di atas USD 70+) adalah penggerak utama margin keuntungan (*profit margin drivers*) yang sesungguhnya bagi Sakila.
+- **Rekomendasi Konten:** Kontrak pengadaan hak siar ke depan harus memprioritaskan aktor dengan efisiensi tinggi guna menekan biaya inventori sekaligus memaksimalkan utilitas penyewaan.
 
 ### 🌍 Market Concentration
 - Pasar Sakila **sangat terkonsentrasi**: `r top5_pct`% revenue berasal dari 5 negara teratas.
@@ -718,16 +723,6 @@ ggplot(df_rfm_sample,
 - Alokasikan anggaran pemasaran ke India, China, AS, sambil membuka program akuisisi di pasar mid-tier.
 - Implementasikan sistem CRM berbasis skor RFM untuk personalisasi komunikasi dengan setiap segmen pelanggan.
 </div>
-
----
-
-# Referensi
-
-- MySQL AB. (2006). *Sakila Sample Database*. Oracle Corporation. https://dev.mysql.com/doc/sakila/en/
-- Hughes, A. M. (1994). *Strategic Database Marketing*. Probus Publishing.
-- Wickham, H., & Grolemund, G. (2017). *R for Data Science*. O'Reilly Media.
-- R Core Team. (2024). *R: A Language and Environment for Statistical Computing*. R Foundation for Statistical Computing.
-- Wilke, C. O. (2019). *Fundamentals of Data Visualization*. O'Reilly Media.
 
 ---
 
