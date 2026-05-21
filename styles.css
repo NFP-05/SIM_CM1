@@ -57,7 +57,7 @@ h3 {
   margin-top: 1.2rem;
 }
 
-/* ==== Code Blocks ==== */
+/* ==== Untuk Kode Chunks ==== */
 pre, code {
   font-family: 'Fira Code', monospace;
   font-size: 0.88em;
@@ -80,7 +80,7 @@ code:not(pre code) {
   border-radius: 4px;
 }
 
-/* ==== Callout / Info Box ==== */
+/* ==== Kotak Info ==== */
 .callout-box {
   background: linear-gradient(135deg, #d6eaf8, #ebf5fb);
   border-left: 5px solid #2980b9;
@@ -90,22 +90,12 @@ code:not(pre code) {
   font-size: 0.95em;
 }
 
-.callout-box.warning {
-  background: linear-gradient(135deg, #fef9e7, #fdebd0);
-  border-left-color: #e67e22;
-}
-
 .callout-box.success {
   background: linear-gradient(135deg, #eafaf1, #d5f5e3);
   border-left-color: #27ae60;
 }
 
-.callout-box.danger {
-  background: linear-gradient(135deg, #fdedec, #fce4e4);
-  border-left-color: #e74c3c;
-}
-
-/* ==== Metric Cards ==== */
+/* ==== Kartu-Kartu Ringkasan ==== */
 .metric-row {
   display: flex ;
   gap: 16px;
@@ -144,7 +134,7 @@ code:not(pre code) {
   margin-top: 4px;
 }
 
-/* ==== Tables ==== */
+/* ==== Tabel (Global Rules) ==== */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -173,13 +163,45 @@ table tr:hover {
   transition: background-color 0.1s ease;
 }
 
-/* Agar Konten Utama Tidak Menabrak TOC */
-.col-md-9 {
-    width: calc(100% - 260px) !important;
-    float: right !important;
+/* Custom Table */
+.custom-table {
+  width: 100%;
+  overflow-x: auto;
+  margin: 25px 0;
 }
 
-/* ==== Table of Contents (TOC) ==== */
+.custom-table table {
+  width: 100% !important;
+  border-collapse: collapse;
+  font-size: 14px !important; 
+  margin-bottom: 1rem;
+}
+
+.custom-table table th {
+  background-color: #2980b9 !important; 
+  color: white !important;
+  padding: 10px 14px !important;
+  text-align: left;
+}
+
+.custom-table table td {
+  padding: 8px 14px !important;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+/* Efek Belang-Belang */
+.custom-table table tr:nth-child(even) {
+  background-color: #f4f6f7;
+}
+
+/* Efek Sorot Hover */
+.custom-table table tr:hover {
+  background-color: #d6eaf8 !important;
+  transition: background-color 0.1s ease;
+}
+
+
+/* ==== Daftar Isi ==== */
 #TOC {
   background: white;
   border: 1px solid #d5dbdb;
@@ -223,14 +245,14 @@ table tr:hover {
   padding-bottom: 6px;
 }
 
-/* ==== Horizontal Rule ==== */
+/* ==== Garis Horizontal ==== */
 hr {
   border: none;
   border-top: 2px solid #d5dbdb;
   margin: 2rem 0;
 }
 
-/* ==== Figure captions ==== */
+/* ==== Caption Gambar ==== */
 p.caption {
   font-size: 0.82em;
   color: #7f8c8d;
@@ -259,15 +281,7 @@ p.caption {
   }
 }
 
-/* ==== Interaction For Image ==== */
-.zoomable {
-    cursor: zoom-in;
-    transition: transform 0.3s;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-/* ==== Section divider label ==== */
+/* ==== Pemisah Section ==== */
 .section-label {
   display: inline-block;
   background: #2980b9;
@@ -279,4 +293,59 @@ p.caption {
   text-transform: uppercase;
   letter-spacing: 0.8px;
   margin-bottom: 8px;
+}
+
+/* ==== KHUSUS BADGES SEGMENTASI RFM ==== */
+
+/* Properti Dasar untuk Semua Badge */
+.rfm-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Warna Spesifik per Segmen sesuai Kode Warna Analisismu */
+
+/* 1. Champions (Hijau) */
+.rfm-badge.rfm-champions {
+  background-color: #d5f5e3;
+  color: #1e8449;
+  border: 1px solid #abebc6;
+}
+
+/* 2. Loyal Customers (Biru Tua) */
+.rfm-badge.rfm-loyal {
+  background-color: #eaf2fb;
+  color: #1a5276;
+  border: 1px solid #a9cce3;
+}
+
+/* 3. Potential Loyalist (Kuning/Emas Tua) */
+.rfm-badge.rfm-potential {
+  background-color: #fef9e7;
+  color: #b7950b;
+  border: 1px solid #f9e79f;
+}
+
+/* 4. At Risk (Merah) */
+.rfm-badge.rfm-atrisk {
+  background-color: #fde8e8;
+  color: #c0392b;
+  border: 1px solid #f5b7b1;
+}
+
+/* 5. Lost / Hibernating (Abu-abu) */
+.rfm-badge.rfm-lost {
+  background-color: #f2f4f4;
+  color: #717d7e;
+  border: 1px solid #d5dbdb;
 }
