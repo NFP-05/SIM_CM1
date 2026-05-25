@@ -14,6 +14,9 @@ output:
     toc_depth: 3
     number_sections: true
     code_folding: show
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -27,50 +30,68 @@ knitr::opts_chunk$set(
 )
 ```
 
----
+------------------------------------------------------------------------
 
-# Pendahuluan 
+# Pendahuluan
 
 ## Deskripsi Dataset
 
-<div class="callout-box">
-**Database Sakila** adalah contoh database relasional yang dikembangkan oleh MySQL untuk keperluan pembelajaran. Database ini mensimulasikan sistem manajemen penyewaan film (*DVD rental store*) dan terdiri dari **16 tabel** yang saling berelasi.
-</div>
+::: callout-box
+**Database Sakila** adalah contoh database relasional yang dikembangkan
+oleh MySQL untuk keperluan pembelajaran. Database ini mensimulasikan
+sistem manajemen penyewaan film (*DVD rental store*) dan terdiri dari
+**16 tabel** yang saling berelasi.
+:::
 
 ## Struktur Database (ERD)
 
 Gambar ERD (Entity Diagram Relationship) pada database sakila
 
 <a href="images/Sakila_ERD_Diag.png" target="_blank">
-  <img src="images/Sakila_ERD_Diag.png" width="100%" style="border:1px solid #eee;">
+<img src="images/Sakila_ERD_Diag.png" width="100%" style="border:1px solid #eee;"/>
 </a>
-<p style="text-align: center; font-size: 0.8em;"><i>Gambar 1. Entity Relationship Diagram (ERD) Database Sakila. Klik gambar untuk membuka di tab baru</i></p>
+
+<p style="text-align: center; font-size: 0.8em;">
+
+<i>Gambar 1. Entity Relationship Diagram (ERD) Database Sakila. Klik
+gambar untuk membuka di tab baru</i>
+
+</p>
 
 ## Insight yang Diangkat
 
-<div class="callout-box success">
-**Insight Utama:** *Bagaimana performa bisnis Sakila ditinjau dari profitabilitas aktor (Actor ROI), distribusi geografis pendapatan di pasar global (Market Concentration), serta segmentasi loyalitas pelanggan menggunakan analisis RFM (Recency, Frequency, Monetary)?*
+::: {.callout-box .insight}
+**Insight Utama:** *Bagaimana performa bisnis Sakila ditinjau dari
+profitabilitas aktor (Actor ROI), distribusi geografis pendapatan di
+pasar global (Market Concentration), serta pola waktu penyewaan
+pelanggan menggunakan analisis temporal (Peak Hour & Day Analysis)?*
 *Analisis ini bertujuan untuk:*
 
-*1.  Mengidentifikasi aktor yang memberikan imbal hasil (revenue) tertinggi bagi perusahaan.*
+*1. Mengidentifikasi aktor yang memberikan imbal hasil (revenue)
+tertinggi bagi perusahaan.*
 
-*2.  Memetakan konsentrasi pasar di berbagai negara untuk melihat wilayah yang paling potensial.*
+*2. Memetakan konsentrasi pasar di berbagai negara untuk melihat wilayah
+yang paling potensial.*
 
-*3.  Mengategorikan pelanggan ke dalam segmen loyalitas guna membedakan pelanggan setia (champions) dari pelanggan yang berisiko berhenti berlangganan (churn risk).*
-</div>
+*3. Mengidentifikasi pola penyewaan (peak hour, peak day, dan seasonal
+trends) untuk optimalisasi inventory dan strategi promosi yang tepat
+waktu.*
+:::
 
 ### Tabel-tabel Utama yang Digunakan
 
-| Tabel | Deskripsi | Kolom Kunci |
-|-------|-----------|-------------|
-| `rental` | Transaksi sewa film (Untuk Recency & Frequency) | `rental_id`, `rental_date`, `customer_id`, `inventory_id` |
-| `payment` | Pembayaran pelanggan (Untuk Monetary) | `payment_id`, `amount`, `payment_date`, `customer_id` |
-| `actor` | Profil aktor pemeran dalam film | `actor_id`, `first_name`, `last_name` |
-| `film_actor` | Tabel penghubung antara aktor dengan film | `actor_id`, `film_id` |
-| `customer` | Data pelanggan | `customer_id`, `address_id` |
-| `address`, `city`, `country` | Data hierarki lokasi | `address_id`, `city_id`, `country_id` |
+| Tabel | Deskripsi | Kolom Kunci / Atribut Utama |
+|:---|:---|:---|
+| <span class="db-badge db-table">rental</span> | Transaksi sewa film (Untuk analisis waktu rental) | <span class="db-badge db-column">rental_id</span>, <span class="db-badge db-column">rental_date</span>, <span class="db-badge db-column">customer_id</span>, <span class="db-badge db-column">inventory_id</span> |
+| <span class="db-badge db-table">payment</span> | Pembayaran pelanggan | <span class="db-badge db-column">payment_id</span>, <span class="db-badge db-column">amount</span>, <span class="db-badge db-column">payment_date</span>, <span class="db-badge db-column">customer_id</span> |
+| <span class="db-badge db-table">actor</span> | Profil aktor pemeran dalam film | <span class="db-badge db-column">actor_id</span>, <span class="db-badge db-column">first_name</span>, <span class="db-badge db-column">last_name</span> |
+| <span class="db-badge db-table">film_actor</span> | Tabel penghubung antara aktor dengan film | <span class="db-badge db-column">actor_id</span>, <span class="db-badge db-column">film_id</span> |
+| <span class="db-badge db-table">customer</span> | Data pelanggan | <span class="db-badge db-column">customer_id</span>, <span class="db-badge db-column">address_id</span> |
+| <span class="db-badge db-table">address</span>, <span class="db-badge db-table">city</span>, <span class="db-badge db-table">country</span> | Data hierarki lokasi | <span class="db-badge db-column">address_id</span>, <span class="db-badge db-column">city_id</span>, <span class="db-badge db-column">country_id</span> |
+| <span class="db-badge db-table">inventory</span> | Data keping fisik DVD di tiap toko | <span class="db-badge db-column">inventory_id</span>, <span class="db-badge db-column">film_id</span>, <span class="db-badge db-column">store_id</span> |
+| <span class="db-badge db-table">film</span> | Informasi katalog film | <span class="db-badge db-column">film_id</span>, <span class="db-badge db-column">title</span>, <span class="db-badge db-column">rental_duration</span> |
 
----
+------------------------------------------------------------------------
 
 # Persiapan Data
 
@@ -102,7 +123,7 @@ con <- DBI::dbConnect(odbc::odbc(),
 
 ```
 
----
+------------------------------------------------------------------------
 
 # Query SQL
 
@@ -128,38 +149,40 @@ ORDER BY total_revenue DESC
 LIMIT 20;
 ```
 
-## Market Concentration
+## Inventory Efficiency
 
-```{sql market_concentration, connection=con}
+```{sql inventory_efficiency, connection=con}
 SELECT
-    co.country,
-    COUNT(DISTINCT cu.customer_id)            AS customer_count,
-    COUNT(r.rental_id)                        AS total_rental,
-    ROUND(SUM(p.amount), 2)                   AS total_revenue,
-    ROUND(SUM(p.amount) / COUNT(DISTINCT cu.customer_id), 2)  AS avg_per_cust
-FROM country   co
-JOIN city      ci ON co.country_id    = ci.country_id
-JOIN address   ad ON ci.city_id       = ad.city_id
-JOIN customer  cu ON ad.address_id    = cu.address_id
-JOIN rental    r  ON cu.customer_id   = r.customer_id
-JOIN payment   p  ON r.rental_id      = p.rental_id
-GROUP BY co.country
-ORDER BY total_revenue DESC
-LIMIT 20;
+    s.store_id,
+    f.title,
+    COUNT(DISTINCT i.inventory_id) AS jumlah_stok,
+    COUNT(r.rental_id)             AS total_rental,
+    ROUND(COUNT(r.rental_id) * 1.0 / COUNT(DISTINCT i.inventory_id), 2) AS utilization_rate
+FROM store s
+JOIN inventory i ON s.store_id = i.store_id
+JOIN film      f ON i.film_id   = f.film_id
+LEFT JOIN rental  r ON i.inventory_id = r.inventory_id
+GROUP BY s.store_id, f.film_id, f.title
+ORDER BY utilization_rate ASC
+LIMIT 30;
 ```
 
-## RFM Segmentation
+## Rental Timing 
 
-```{sql rfm_segment, connection=con}
+```{sql rental_timing, connection=con}
 SELECT
-    cu.customer_id,
-    DATEDIFF('2006-02-15', MAX(r.rental_date))   AS recency,
-    COUNT(r.rental_id)                            AS frequency,
-    ROUND(SUM(p.amount), 2)                       AS monetary
-FROM customer  cu
-JOIN rental    r ON cu.customer_id = r.customer_id
-JOIN payment   p ON r.rental_id    = p.rental_id
-GROUP BY cu.customer_id;
+    HOUR(r.rental_date)                       AS jam_rental,
+    DAYNAME(r.rental_date)                    AS hari_rental,
+    DAYOFWEEK(r.rental_date)                  AS hari_nomor,
+    DATE(r.rental_date)                       AS tanggal_rental,
+    COUNT(r.rental_id)                        AS jumlah_rental,
+    ROUND(SUM(p.amount), 2)                   AS total_revenue,
+    COUNT(DISTINCT r.customer_id)             AS unique_customers
+FROM rental    r
+JOIN payment   p ON r.rental_id = p.rental_id
+GROUP BY HOUR(r.rental_date), DAYNAME(r.rental_date), 
+         DAYOFWEEK(r.rental_date), DATE(r.rental_date)
+ORDER BY jam_rental, hari_nomor, tanggal_rental;
 ```
 
 ```{r include=FALSE}
@@ -180,62 +203,86 @@ df_actor_roi <- dbGetQuery(con, "
   GROUP BY a.actor_id,a.first_name,a.last_name
   ORDER BY total_revenue DESC LIMIT 20")
 
-df_market <- dbGetQuery(con, "
-  SELECT co.country,
-         COUNT(DISTINCT cu.customer_id) AS customer_count,
-         COUNT(r.rental_id) AS total_rental,
-         ROUND(SUM(p.amount),2) AS total_revenue,
-         ROUND(SUM(p.amount)/COUNT(DISTINCT cu.customer_id),2) AS avg_per_cust
-  FROM country co
-  JOIN city ci ON co.country_id=ci.country_id
-  JOIN address ad ON ci.city_id=ad.city_id
-  JOIN customer cu ON ad.address_id=cu.address_id
-  JOIN rental r ON cu.customer_id=r.customer_id
-  JOIN payment p ON r.rental_id=p.rental_id
-  GROUP BY co.country ORDER BY total_revenue DESC LIMIT 20")
+df_inventory_efficiency <- dbGetQuery(con, "
+  SELECT s.store_id,
+         f.title,
+         COUNT(DISTINCT i.inventory_id) AS jumlah_stok,
+         COUNT(r.rental_id)             AS total_rental,
+         ROUND(COUNT(r.rental_id) * 1.0 / COUNT(DISTINCT i.inventory_id), 2) AS utilization_rate
+  FROM store s
+  JOIN inventory i ON s.store_id = i.store_id
+  JOIN film f ON i.film_id = f.film_id
+  LEFT JOIN rental r ON i.inventory_id = r.inventory_id
+  GROUP BY s.store_id, f.film_id, f.title
+  ORDER BY utilization_rate ASC")
 
-df_rfm_base <- dbGetQuery(con, "
-  SELECT cu.customer_id,
-         DATEDIFF('2006-02-15', MAX(r.rental_date)) AS recency,
-         COUNT(r.rental_id)    AS frequency,
-         ROUND(SUM(p.amount),2) AS monetary
-  FROM customer cu
-  JOIN rental r ON cu.customer_id=r.customer_id
+# Hitung statistik ringkasan untuk kartu metrik
+total_dead_stock <- sum(df_inventory_efficiency$utilization_rate == 0)
+avg_utilization  <- round(mean(df_inventory_efficiency$utilization_rate, na.rm=TRUE), 2)
+most_efficient_store <- df_inventory_efficiency %>%
+  group_by(store_id) %>%
+  summarise(avg_util = mean(utilization_rate)) %>%
+  arrange(desc(avg_util)) %>%
+  slice(1) %>%
+  pull(store_id)
+
+df_rental_timing <- dbGetQuery(con, "
+  SELECT HOUR(r.rental_date)           AS jam_rental,
+         DAYNAME(r.rental_date)        AS hari_rental,
+         DAYOFWEEK(r.rental_date)      AS hari_nomor,
+         DATE(r.rental_date)           AS tanggal_rental,
+         COUNT(r.rental_id)            AS jumlah_rental,
+         ROUND(SUM(p.amount),2)        AS total_revenue,
+         COUNT(DISTINCT r.customer_id) AS unique_customers
+  FROM rental r
   JOIN payment p ON r.rental_id=p.rental_id
-  GROUP BY cu.customer_id")
+  GROUP BY HOUR(r.rental_date), DAYNAME(r.rental_date), 
+           DAYOFWEEK(r.rental_date), DATE(r.rental_date)
+  ORDER BY jam_rental, hari_nomor, tanggal_rental")
 
 dbDisconnect(con)
 
-# Hitung skor & segmen RFM di R
-tanggal_ref <- as.Date("2006-02-15")
-df_rfm_raw <- df_rfm_base %>%
+# Proses data untuk analisis
+df_rental_timing <- df_rental_timing %>%
   mutate(
-    R_score = ntile(-recency,  5),
-    F_score = ntile(frequency, 5),
-    M_score = ntile(monetary,  5),
-    segment = case_when(
-      R_score >= 4 & F_score >= 4 & M_score >= 4 ~ "Champions",
-      R_score >= 3 & F_score >= 3                ~ "Loyal Customers",
-      R_score >= 3 & F_score <= 2                ~ "Potential Loyalist",
-      R_score <= 2 & F_score >= 3                ~ "At Risk",
-      TRUE                                        ~ "Lost / Hibernating"
-    )
+    jam_rental = as.integer(jam_rental),
+    hari_nomor = as.integer(hari_nomor),
+    tanggal_rental = as.Date(tanggal_rental)
   )
-df_rfm_summary <- df_rfm_raw %>%
-  group_by(segment) %>%
-  summarise(n_pelanggan=n(), avg_recency=round(mean(recency),1),
-            avg_frequency=round(mean(frequency), 1),
-            avg_monetary=round(mean(monetary), 2),
-            total_revenue=round(sum(monetary), 2), .groups="drop") %>%
-  mutate(revenue_pct = total_revenue/sum(total_revenue)*100) %>%
-  arrange(desc(total_revenue))
+
+# Agregasi per jam (hourly pattern)
+df_hourly <- df_rental_timing %>%
+  group_by(jam_rental) %>%
+  summarise(
+    total_rental_per_jam = sum(jumlah_rental),
+    avg_revenue_per_jam = round(mean(total_revenue), 2),
+    avg_customers_per_jam = round(mean(unique_customers), 2),
+    .groups = 'drop'
+  ) %>%
+  arrange(jam_rental)
+
+# Agregasi per hari (daily pattern)
+df_daily <- df_rental_timing %>%
+  group_by(hari_rental, hari_nomor) %>%
+  summarise(
+    total_rental_per_hari = sum(jumlah_rental),
+    avg_revenue_per_hari = round(mean(total_revenue), 2),
+    avg_customers_per_hari = round(mean(unique_customers), 2),
+    .groups = 'drop'
+  ) %>%
+  arrange(hari_nomor)
+
+# Map nama hari untuk sorting
+hari_order <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+df_daily$hari_rental <- factor(df_daily$hari_rental, levels = hari_order)
+df_daily <- df_daily %>% arrange(hari_rental)
 ```
 
----
+------------------------------------------------------------------------
 
 # Analisis I - Actor ROI
 
-<span class="section-label">Analisis Actor ROI (Return on Investment)</span>
+[Analisis Actor ROI (Return on Investment)]{.section-label}
 
 ## Ringkasan dengan Metric Cards
 
@@ -246,33 +293,51 @@ top_rev         <- df_actor_roi$total_revenue[1]
 rata_film       <- round(mean(df_actor_roi$jumlah_film), 1)
 ```
 
-<div class="metric-row">
-  
-<div class="metric-card">
-<div class="metric-value">`r top_aktor`</div>
-<div class="metric-label">Aktor ROI Tertinggi</div>
-</div>
-  
-<div class="metric-card">
-<div class="metric-value">`r scales::dollar(top_rev, prefix="$")`</div>
-<div class="metric-label">Revenue Tertinggi</div>
-</div>
-  
-<div class="metric-card">
-<div class="metric-value">`r round(rata_film, 1)`</div>
-<div class="metric-label">Rata-rata Film/Aktor</div>
-</div>
-  
-<div class="metric-card">
-<div class="metric-value">`r scales::dollar(total_rev_aktor, prefix="$")`</div>
-<div class="metric-label">Total Revenue Top 20</div>
-</div>
-  
-</div>
+::::::::::::::: metric-row
+::::: metric-card
+::: metric-value
+`r top_aktor`
+:::
+
+::: metric-label
+Aktor ROI Tertinggi
+:::
+:::::
+
+::::: metric-card
+::: metric-value
+`r scales::dollar(top_rev, prefix="$")`
+:::
+
+::: metric-label
+Revenue Tertinggi
+:::
+:::::
+
+::::: metric-card
+::: metric-value
+`r round(rata_film, 1)`
+:::
+
+::: metric-label
+Rata-rata Film/Aktor
+:::
+:::::
+
+::::: metric-card
+::: metric-value
+`r scales::dollar(total_rev_aktor, prefix="$")`
+:::
+
+::: metric-label
+Total Revenue Top 20
+:::
+:::::
+:::::::::::::::
 
 ## Tabel Actor ROI
 
-<div class="custom-table">
+::: custom-table
 ```{r tabel_actor}
 df_actor_roi %>%
   select(nama_aktor, jumlah_film, jumlah_rental, total_revenue, revenue_per_film) %>%
@@ -288,7 +353,7 @@ df_actor_roi %>%
   ) %>%
   kableExtra::row_spec(1:3, bold = TRUE, background = "#d6eaf8")
 ```
-</div>
+:::
 
 ## Visualisasi: Lollipop Chart Actor ROI
 
@@ -325,410 +390,367 @@ df_actor_roi %>%
   )
 ```
 
-<div class="interpretasi">
-<h4>💡 Interpretasi — Actor ROI</h4>
+::: interpretasi
+<h4>Interpretasi — Actor ROI</h4>
 
-Analisis performa finansial berbasis kontribusi aktor pada database Sakila mengonfirmasi bahwa **kuantitas produksi film bukanlah prediktor tunggal keberhasilan finansial**. Ditemukan disparitas yang jelas antara popularitas volume dengan efisiensi pengembalian investasi (ROI), dengan rincian analisis sebagai berikut:
+Analisis performa finansial berbasis kontribusi aktor pada database
+Sakila mengonfirmasi bahwa **kuantitas produksi film bukanlah prediktor
+tunggal keberhasilan finansial**. Ditemukan disparitas yang jelas antara
+popularitas volume dengan efisiensi pengembalian investasi (ROI), dengan
+rincian analisis sebagai berikut:
 
-1. **Paradoks Kuantitas vs Efisiensi Finansial:** Data pada tabel menunjukkan bahwa aktor yang memimpin dari sisi absolut total revenue tertinggi (didorong oleh produktivitasnya yang tinggi dalam membintangi banyak judul film) belum tentu memiliki efisiensi pengembalian terbaik. Banyak judul film justru berpotensi meningkatkan biaya pengadaan jika tidak diimbangi dengan rata-rata utilitas penyewaan yang tinggi per proyeknya.
+1.  **Paradoks Kuantitas vs Efisiensi Finansial:** Data pada tabel
+    menunjukkan bahwa aktor yang memimpin dari sisi absolut total
+    revenue tertinggi (didorong oleh produktivitasnya yang tinggi dalam
+    membintangi banyak judul film) belum tentu memiliki efisiensi
+    pengembalian terbaik. Banyak judul film justru berpotensi
+    meningkatkan biaya pengadaan jika tidak diimbangi dengan rata-rata
+    utilitas penyewaan yang tinggi per proyeknya.
 
-2. **Identifikasi Aset Strategis Utama (High-ROI Drivers):** Sebaliknya, aktor-aktor yang menduduki peringkat atas pada metrik *Revenue per Film* (seperti yang memiliki rata-rata menghasilkan di atas USD 70+ per film) muncul sebagai bintang dengan efisiensi terbaik. Bagi manajemen Sakila, aktor dalam kategori inilah yang menjadi penggerak margin keuntungan (*profit margin drivers*) yang sesungguhnya karena mampu menghasilkan pendapatan maksimal dengan jumlah inventori film yang lebih efisien.
+2.  **Identifikasi Aset Strategis Utama (High-ROI Drivers):**
+    Sebaliknya, aktor-aktor yang menduduki peringkat atas pada metrik
+    *Revenue per Film* (seperti yang memiliki rata-rata menghasilkan di
+    atas USD 70+ per film) muncul sebagai bintang dengan efisiensi
+    terbaik. Bagi manajemen Sakila, aktor dalam kategori inilah yang
+    menjadi penggerak margin keuntungan (*profit margin drivers*) yang
+    sesungguhnya karena mampu menghasilkan pendapatan maksimal dengan
+    jumlah inventori film yang lebih efisien.
 
-3. **Implikasi Strategis Pengadaan Konten (Content Acquisition):** Hasil evaluasi ini memberikan rekomendasi kuat bagi tim *purchasing* dan pengadaan hak siar film. Kontrak atau lisensi film baru ke depan harus diprioritaskan pada karya-karya yang dibintangi oleh aktor dengan nilai *Revenue per Film* yang tinggi. Strategi ini akan meminimalkan biaya (mengurangi penimbunan judul film yang kurang produktif), namun tetap mampu mengoptimalkan perputaran revenue secara maksimal.
+3.  **Implikasi Strategis Pengadaan Konten (Content Acquisition):**
+    Hasil evaluasi ini memberikan rekomendasi kuat bagi tim *purchasing*
+    dan pengadaan hak siar film. Kontrak atau lisensi film baru ke depan
+    harus diprioritaskan pada karya-karya yang dibintangi oleh aktor
+    dengan nilai *Revenue per Film* yang tinggi. Strategi ini akan
+    meminimalkan biaya (mengurangi penimbunan judul film yang kurang
+    produktif), namun tetap mampu mengoptimalkan perputaran revenue
+    secara maksimal.
+:::
 
-</div>
+------------------------------------------------------------------------
 
----
+# Analisis II - Inventory Efficiency
 
-# Analisis II - Market Concentration
+[Analisis Efisiensi Inventori]{.section-label}
 
-<span class="section-label">Analisis Market Concentration</span>
+## Ringkasan dengan Metric Cards
 
-## Statistik Ringkasan
+::::::::::::::: metric-row
+::::: metric-card
+::: metric-value
+`r total_dead_stock` Film
+:::
 
-```{r market_stats}
-top5_rev     <- sum(df_market$total_revenue[1:5])
-total_rev_mk <- sum(df_market$total_revenue)
-top5_pct     <- round(top5_rev / total_rev_mk * 100, 1)
-top_negara   <- df_market$country[1]
-```
+::: metric-label
+Total Dead Stock (Utilisasi = 0)
+:::
+:::::
 
-<div class="metric-row">
+::::: metric-card
+::: metric-value
+`r avg_utilization`×
+:::
 
-<div class="metric-card">
-<div class="metric-value">`r top_negara`</div>
-<div class="metric-label">Pasar Terbesar</div>
-</div>
+::: metric-label
+Rata-Rata Perputaran Stok
+:::
+:::::
 
-<div class="metric-card">
-<div class="metric-value">`r top5_pct`%</div>
-<div class="metric-label">Revenue dari Top 5 Negara</div>
-</div>
-  
-<div class="metric-card">
-<div class="metric-value">`r nrow(df_market)`</div>
-<div class="metric-label">Negara Teranalisis</div>
-</div>
+::::: metric-card
+::: metric-value
+Toko `r most_efficient_store`
+:::
 
-<div class="metric-card">
-<div class="metric-value">`r dollar(total_rev_mk, prefix="$")`</div>
-<div class="metric-label">Total Revenue Global</div>
-</div>
+::: metric-label
+Toko Paling Efisien
+:::
+:::::
 
-</div>
+::::: metric-card
+::: metric-value
+`r nrow(df_inventory_efficiency)`
+:::
 
-## Visualisasi: Treemap Konsentrasi Pasar
+::: metric-label
+Total Judul Terpantau
+:::
+:::::
+:::::::::::::::
 
-```{r plot_treemap, fig.cap="Gambar 3. Treemap Market Concentration — Revenue per Negara (Top 20)"}
-df_market %>%
-  ggplot(aes(area = total_revenue,
-             fill = total_revenue,
-             label = paste0(country, "\n$", comma(total_revenue)))) +
-  geom_treemap() +
-  geom_treemap_text(
-    color     = "black",
-    place     = "centre",
-    size      = 11.5,
-    fontface  = "bold",
-    reflow    = TRUE
-  ) +
-  scale_fill_gradientn(
-    colors = c("#aed6f1","#2980b9","#1a5276"),
-    name   = "Revenue (USD)",
-    labels = dollar_format()
-  ) +
+## Visualisasi: Scatter Plot Stok vs Rental Count (Deteksi Dead Stock)
+
+```{r plot_acak, fig.cap="Gambar 3. Treemap Market Concentration — Revenue per Negara (Top 20)"}
+df_inventory_efficiency %>%
+  slice(1:150) %>% # Mengambil sampel 150 baris terendah untuk visualisasi yang bersih
+  mutate(store_id = as.factor(paste("Toko", store_id))) %>%
+  ggplot(aes(x = jumlah_stok, y = total_rental, color = store_id)) +
+  geom_jitter(alpha = 0.7, size = 3, width = 0.1) +
+  scale_color_manual(values = c("Toko 1" = "#3498db", "Toko 2" = "#e67e22")) +
   labs(
-    title   = "Market Concentration — Revenue per Negara (Top 20)",
-    subtitle= "Luas kotak sebanding dengan total revenue; warna menunjukkan intensitas",
-    caption = "Sumber: Database Sakila (MySQL)"
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(
-    plot.title    = element_text(face = "bold", size = 13, color = "#1a252f"),
-    plot.subtitle = element_text(color = "#7f8c8d", size = 9),
-    legend.position = "right"
-  )
-```
-
-## Visualisasi: Pareto Chart Konsentrasi Revenue
-
-```{r plot_pareto, fig.cap="Gambar 4. Pareto Chart — Kumulatif Revenue per Negara"}
-df_market_pareto <- df_market %>%
-  arrange(desc(total_revenue)) %>%
-  mutate(
-    idx            = row_number(),
-    label_country  = fct_inorder(country),
-    rev_pct        = total_revenue / sum(total_revenue) * 100,
-    cum_pct        = cumsum(rev_pct)
-  )
-
-ggplot(df_market_pareto, aes(x = label_country)) +
-  geom_col(aes(y = rev_pct, fill = rev_pct), width = 0.7) +
-  geom_line(aes(y = cum_pct, group = 1), color = "#e74c3c", size = 1.1) +
-  geom_point(aes(y = cum_pct), color = "#e74c3c", size = 2.5) +
-  geom_hline(yintercept = 80, linetype = "dashed", color = "#e74c3c", alpha = 0.5) +
-  annotate("text", x = 18, y = 82, label = "80% threshold",
-           color = "#e74c3c", size = 3.2, fontface = "italic") +
-  scale_fill_gradientn(colors = c("#85c1e9","#2980b9","#1f618d"),
-                       guide  = "none") +
-  scale_y_continuous(
-    name     = "Revenue (%)",
-    sec.axis = sec_axis(~., name = "Kumulatif Revenue (%)")
-  ) +
-  labs(
-    title    = "Pareto Chart — Konsentrasi Revenue per Negara",
-    subtitle = "Batang = porsi revenue; Garis merah = kumulatif (Prinsip Pareto 80/20)",
-    x        = "Negara",
+    title    = "Inventory Efficiency — Analisis Distribusi Perputaran DVD",
+    subtitle = "Titik di kiri bawah atau menempel di sumbux X (Rental = 0) mengindikasikan Dead Stock",
+    x        = "Jumlah Salinan Stok (Copies)",
+    y        = "Total Frekuensi Rental (Times)",
+    color    = "Lokasi Toko",
     caption  = "Sumber: Database Sakila (MySQL)"
   ) +
   theme_minimal(base_size = 11) +
   theme(
-    plot.title    = element_text(face = "bold", size = 13),
+    plot.title   = element_text(face = "bold", size = 13, color = "#1a252f"),
     plot.subtitle = element_text(color = "#7f8c8d", size = 9),
-    axis.text.x   = element_text(angle = 45, hjust = 1, size = 9)
+    legend.position = "top"
   )
 ```
 
-## Tabel: Rata-rata Revenue per Pelanggan per Negara
+## Tabel: Sampel 20 Inventori dengan Tingkat Efisiensi Terendah (Potensi Dead Stock)
 
-<div class="custom-table">
-```{r tabel_market}
-df_market %>%
-  mutate(revenue_pct = round(total_revenue / sum(total_revenue) * 100, 2)) %>%
-  select(country, customer_count, total_rental, total_revenue, avg_per_cust, revenue_pct) %>%
-  kable(
-    digits    = 2,
-    col.names = c("Negara", "Jml Pelanggan", "Total Rental",
-                  "Total Revenue (USD)", "Avg/Pelanggan (USD)", "Revenue (%)"),
-    caption   = "Tabel 2. Market Concentration — Top 20 Negara"
-  ) %>%
-  kable_styling(
-    bootstrap_options = c("striped","hover","condensed","responsive"),
-    full_width = TRUE
-  ) %>%
-  row_spec(1:3, bold = TRUE, background = "#d6eaf8")
-```
-</div>
-
-<div class="interpretasi">
-<h4>🌍 Interpretasi — Market Concentration</h4>
-
-- **India** dan **China** mendominasi dua posisi teratas pasar global Sakila, mencerminkan basis pelanggan yang besar dari negara berpenduduk tinggi.
-- Berdasarkan **Pareto Chart**, sekitar **5 negara teratas** menyumbang ≥ `r top5_pct`% dari total revenue — menunjukkan konsentrasi pasar yang cukup tinggi (*high market concentration*).
-- **Rata-rata revenue per pelanggan** (`avg_per_cust`) dapat menjadi indikator yang lebih adil untuk membandingkan potensi pasar antar negara, terutama pada negara dengan jumlah pelanggan kecil namun spending tinggi.
-- Negara-negara di peringkat bawah (11–20) memiliki revenue yang jauh lebih kecil namun **rata-rata belanja per pelanggan** yang bersaing, mengindikasikan potensi pertumbuhan yang belum dieksploitasi (*untapped market*).
-- **Implikasi strategis:** alokasi sumber daya pemasaran sebaiknya difokuskan ke India, China, dan AS sebagai pasar utama, sekaligus membuka program akuisisi pelanggan di pasar-pasar berkembang.
-</div>
-
----
-
-# Analisis III - RFM Segmentation
-
-<span class="section-label">RFM Segmentation</span>
-
-## Metodologi RFM
-
-Analisis RFM mengkuantifikasi perilaku pelanggan melalui tiga dimensi:
-
-$$
-\text{RFM Score} = (R \times 100) + (F \times 10) + M
-$$
-
-Di mana masing-masing dimensi diberi **skor 1–5** menggunakan metode *quintile scoring*:
-
-| Dimensi | Definisi | Skor Terbaik |
-|---------|----------|-------------|
-| **R** — Recency | Selisih hari sejak transaksi terakhir | Skor 5 = paling baru |
-| **F** — Frequency | Total jumlah transaksi rental | Skor 5 = paling sering |
-| **M** — Monetary | Total nilai pembayaran (USD) | Skor 5 = spending tertinggi |
-
-Formula skor quintile untuk Recency (lebih kecil = lebih baik):
-
-$$
-R_{\text{score}} = \text{ntile}(-\text{recency},\ 5)
-$$
-
-Sedangkan untuk Frequency dan Monetary (lebih besar = lebih baik):
-
-$$
-F_{\text{score}} = \text{ntile}(\text{frequency},\ 5), \quad
-M_{\text{score}} = \text{ntile}(\text{monetary},\ 5)
-$$
-
-### Tabel Definisi Segmen
-
-| Segmen | Kriteria | Karakteristik |
-|--------|----------|---------------|
-| <span class="rfm-badge rfm-champions">Champions</span> | R ≥ 4, F ≥ 4, M ≥ 4 | Sering rental, baru saja rental, spending tinggi |
-| <span class="rfm-badge rfm-loyal">Loyal Customers</span> | R ≥ 3, F ≥ 3 | Frekuensi tinggi, masih aktif |
-| <span class="rfm-badge rfm-potential">Potential Loyalist</span> | R ≥ 3, F ≤ 2 | Baru aktif, frekuensi rendah |
-| <span class="rfm-badge rfm-atrisk">At Risk</span> | R ≤ 2, F ≥ 3 | Dulu sering, kini jarang |
-| <span class="rfm-badge rfm-lost">Lost / Hibernating</span> | Selebihnya | Tidak aktif dalam waktu lama |
-
-## Perhitungan Skor RFM di R
-
-```{r rfm_scoring, eval=FALSE}
-# ── Scoring dilakukan setelah data diambil dari MySQL ──────────
-tanggal_ref <- as.Date("2006-02-15")
-
-df_rfm_raw <- df_rfm_base %>%
-  mutate(
-    R_score = ntile(-recency,  5),
-    F_score = ntile(frequency, 5),
-    M_score = ntile(monetary,  5),
-    RFM_score = R_score * 100 + F_score * 10 + M_score,
-    segment = case_when(
-      R_score >= 4 & F_score >= 4 & M_score >= 4 ~ "Champions",
-      R_score >= 3 & F_score >= 3                ~ "Loyal Customers",
-      R_score >= 3 & F_score <= 2                ~ "Potential Loyalist",
-      R_score <= 2 & F_score >= 3                ~ "At Risk",
-      TRUE                                        ~ "Lost / Hibernating"
-    )
-  )
-```
-
-## Tabel Ringkasan Segmen RFM
-
-<div class="custom-table">
-```{r tabel_rfm}
-warna_seg <- c(
-  "Champions"          = "#1e8449",
-  "Loyal Customers"    = "#1a5276",
-  "Potential Loyalist" = "#b7950b",
-  "At Risk"            = "#c0392b",
-  "Lost / Hibernating" = "#717d7e"
-)
-
-df_rfm_summary %>%
-  mutate(revenue_pct = round(revenue_pct, 1)) %>%
+::: custom-table
+```{r tabel_inventory_efficiency}
+df_inventory_efficiency %>%
+  slice(1:20) %>%
+  select(store_id, title, jumlah_stok, total_rental, utilization_rate) %>%
   knitr::kable(
-    digits    = 2,
-    col.names = c("Segmen", "Jml Pelanggan", "Avg Recency (hari)",
-                  "Avg Frequency", "Avg Monetary (USD)",
-                  "Total Revenue (USD)", "Revenue (%)"),
-    caption   = "Tabel 3. Ringkasan Segmentasi RFM Pelanggan Sakila"
+    format = "html", 
+    escape = FALSE, 
+    digits = 2,
+    col.names = c("ID Toko", "Judul Film", "Jumlah Salinan Stok", "Total Rental", "Utilization Rate (×)"),
+    caption = "Tabel 2. Daftar Film Efisiensi Terendah (Peringkat Urutan Utilisasi Terbawah)"
   ) %>%
   kableExtra::kable_styling(
     full_width = TRUE
   ) %>%
-  kableExtra::row_spec(which(df_rfm_summary$segment == "Champions"),
-                       bold = TRUE, background = "#d5f5e3", color = "#1e8449") %>%
-  kableExtra::row_spec(which(df_rfm_summary$segment == "At Risk"),
-                       background = "#fde8e8", color = "#c0392b")
+  kableExtra::row_spec(which(df_inventory_efficiency$utilization_rate[1:20] == 0), bold = TRUE, background = "#fdebd0")
 ```
-</div>
+:::
 
-## Visualisasi: Distribusi Segmen
+::: interpretasi
+<h4>Interpretasi — Inventory Efficiency Analysis</h4>
 
-```{r plot_rfm_bar, fig.cap="Gambar 5. Distribusi Jumlah Pelanggan per Segmen RFM"}
-urutan_seg <- c("Champions","Loyal Customers","Potential Loyalist",
-                "At Risk","Lost / Hibernating")
-warna_seg_vec <- c("#27ae60","#2980b9","#f39c12","#e74c3c","#95a5a6")
+Analisis terhadap tingkat perputaran inventori (*utilization rate*) pada setiap cabang toko Sakila berhasil menyingkap performa alokasi aset keping DVD:
 
-df_rfm_summary %>%
-  mutate(segment = factor(segment, levels = urutan_seg)) %>%
-  ggplot(aes(x = segment, y = n_pelanggan, fill = segment)) +
-  geom_col(width = 0.65, color = "white", show.legend = FALSE) +
-  geom_text(aes(label = paste0(n_pelanggan, " pelanggan\n(",
-                               round(n_pelanggan/sum(n_pelanggan)*100, 1), "%)")),
-            vjust = -0.4, size = 3.2, fontface = "bold", color = "#2c3e50") +
-  scale_fill_manual(values = warna_seg_vec) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.18))) +
-  labs(
-    title    = "Distribusi Pelanggan per Segmen RFM",
-    subtitle = "Segmentasi berdasarkan Recency, Frequency, dan Monetary",
-    x        = NULL,
-    y        = "Jumlah Pelanggan",
-    caption  = "Sumber: Database Sakila (MySQL); Tanggal referensi: 15 Feb 2006"
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(
-    plot.title    = element_text(face = "bold", size = 13),
-    plot.subtitle = element_text(color = "#7f8c8d", size = 9),
-    axis.text.x   = element_text(size = 10)
-  )
-```
+1.  **Identifikasi Dead Stock Berbiaya Tinggi:** Pola titik yang menumpuk di bagian bawah grafik (sejajar atau dekat dengan sumbu X) mendeteksi secara nyata adanya sekelompok film yang berstatus Dead Stock. Meskipun Sakila memiliki beberapa salinan (copies) untuk judul tersebut, frekuensi sewanya mendekati atau sama dengan nol kali.
 
-## Visualisasi: Revenue Kontribusi per Segmen
+2.  **Evaluasi Disparitas Efisiensi Antar Toko:** Metrik rata-rata perputaran inventori menunjukkan toko mana yang memiliki manajemen sirkulasi film lebih baik. Jika salah satu toko memiliki akumulasi *dead stock* yang lebih pekat, hal tersebut menandakan kurangnya kecocokan selera pasar lokal dengan pasokan film yang dikirim ke cabang tersebut.
+3.  **Rekomendasi Aksi Mitigasi Operasional:**
 
-```{r plot_rfm_donut, fig.height=5, fig.cap="Gambar 6. Kontribusi Revenue per Segmen RFM"}
-df_rfm_summary %>%
+    -   **Rotasi Stok Antar Cabang:** Judul film yang membeku (*idle*) di Toko 1 namun memiliki tren tinggi di Toko 2 sebaiknya segera direlokasi fisik daripada melakukan pembelian keping baru.
+    -   **Strategi Likuidasi / Bundling:** Untuk film dengan *utilization rate* mendekati nol, jalankan kampanye sewa khusus ("*Sewa 2 Gratis 1 untuk Film Klasik*") pada zona waktu *Off-Peak* untuk mendorong daya tarik aktivitas peminjaman.
+:::
+
+------------------------------------------------------------------------
+
+# Analisis III - Rental Timing Pattern Analysis (Pola Waktu Penyewaan)
+
+[Analisis Temporal]{.section-label}
+
+## Peak Hour dan Peak Day
+
+::: callout-box
+**Pertanyaan Strategis:** *Kapan pelanggan paling banyak melakukan
+penyewaan? Ada pola peak hour/day yang bisa dieksploitasi untuk promosi
+dan optimasi inventory?*
+
+**Tujuan Analisis:** Mengidentifikasi waktu puncak penyewaan (jam, hari
+dalam seminggu, trend harian) untuk: - Optimasi staffing dan
+operasional - Target timing promosi yang maksimal - Perencanaan
+inventory berdasarkan demand temporal - Kampanye email/notifikasi pada
+waktu engagement tinggi
+:::
+
+## Distribusi Rental per Jam (Peak Hour Analysis)
+
+```{r tabel_hourly}
+df_hourly %>%
   mutate(
-    segment = factor(segment, levels = rev(urutan_seg)),
-    ymax    = cumsum(revenue_pct),
-    ymin    = lag(ymax, default = 0),
-    label_pos = (ymax + ymin) / 2,
-    label   = paste0(segment, "\n", round(revenue_pct, 1), "%")
+    jam_format = paste0(sprintf("%02d", jam_rental), ":00"),
+    pct_dari_total = round(total_rental_per_jam / sum(df_hourly$total_rental_per_jam) * 100, 1)
   ) %>%
-  ggplot(aes(ymax = ymax, ymin = ymin, xmax = 4, xmin = 2.5,
-             fill = segment)) +
-  geom_rect(color = "white") +
-  geom_text(aes(x = 4.5, y = label_pos, label = label,
-                color = segment),
-            size = 3, fontface = "bold") +
-  scale_fill_manual(values  = rev(warna_seg_vec), guide = "none") +
-  scale_color_manual(values = rev(warna_seg_vec), guide = "none") +
-  coord_polar(theta = "y") +
-  xlim(c(0, 5)) +
-  labs(
-    title   = "Kontribusi Revenue per Segmen RFM",
-    caption = "Sumber: Database Sakila (MySQL)"
-  ) +
-  theme_void(base_size = 12) +
-  theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5))
+  select(jam_format, total_rental_per_jam, pct_dari_total, avg_revenue_per_jam, avg_customers_per_jam) %>%
+  knitr::kable(
+    digits    = 2,
+    col.names = c("Jam", "Total Rental", "% dari Total", "Avg Revenue (USD)", "Avg Customers"),
+    caption   = "Tabel 4. Distribusi Penyewaan per Jam — Peak Hour Pattern"
+  ) %>%
+  kableExtra::kable_styling(full_width = TRUE) %>%
+  kableExtra::row_spec(which(df_hourly$total_rental_per_jam == max(df_hourly$total_rental_per_jam)),
+                       background = "#fff3cd", color = "#856404", bold = TRUE)
 ```
 
-## Visualisasi: Scatter RFM (Recency vs Frequency)
-
-```{r plot_rfm_scatter, fig.cap="Gambar 7. Scatter Plot RFM — Recency vs Frequency (warna = Segmen)"}
-set.seed(99)
-df_rfm_sample <- df_rfm_raw %>% sample_n(min(300, nrow(df_rfm_raw)))
-
-ggplot(df_rfm_sample,
-       aes(x = recency, y = frequency, color = segment, size = monetary)) +
-  geom_point(alpha = 0.65) +
-  scale_color_manual(values = c(
-    "Champions"          = "#27ae60",
-    "Loyal Customers"    = "#2980b9",
-    "Potential Loyalist" = "#f39c12",
-    "At Risk"            = "#e74c3c",
-    "Lost / Hibernating" = "#95a5a6"
-  ), name = "Segmen") +
-  scale_size_continuous(name = "Monetary ($)", range = c(1.5, 7)) +
-  scale_x_reverse(name = "Recency (hari sejak rental terakhir) ←") +
+```{r plot_hourly_pattern, fig.cap="Gambar 4a. Pola Penyewaan per Jam (Peak Hour)"}
+df_hourly %>%
+  mutate(
+    jam_format = paste0(sprintf("%02d", jam_rental), ":00"),
+    is_peak = total_rental_per_jam == max(total_rental_per_jam)
+  ) %>%
+  ggplot(aes(x = jam_rental, y = total_rental_per_jam, fill = is_peak)) +
+  geom_col(width = 0.75, show.legend = FALSE) +
+  geom_text(aes(label = total_rental_per_jam, y = total_rental_per_jam + 15),
+            size = 3, fontface = "bold", color = "#2c3e50") +
+  scale_fill_manual(values = c("FALSE" = "#3498db", "TRUE" = "#e74c3c")) +
+  scale_x_continuous(breaks = 0:23, labels = paste0(sprintf("%02d", 0:23), ":00")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.12))) +
   labs(
-    title    = "Sebaran Pelanggan: Recency vs Frequency",
-    subtitle = "Ukuran titik = monetary; Sumbu X dibalik (kiri = lebih baru)",
-    y        = "Frequency (jumlah rental)",
-    caption  = "Sumber: Database Sakila (MySQL); sampel 300 pelanggan"
+    title    = "Peak Hour Analysis: Total Rental per Jam",
+    subtitle = "Identifikasi jam-jam dengan aktivitas penyewaan tertinggi",
+    x        = "Jam (Hour)",
+    y        = "Jumlah Rental",
+    caption  = "Sumber: Database Sakila (MySQL)"
   ) +
   theme_minimal(base_size = 11) +
   theme(
-    plot.title    = element_text(face = "bold", size = 13),
+    plot.title = element_text(face = "bold", size = 12),
     plot.subtitle = element_text(color = "#7f8c8d", size = 9),
-    legend.position = "right"
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 9)
+  )
+```
+
+## Distribusi Rental per Hari (Peak Day Analysis)
+
+```{r tabel_daily}
+df_daily %>%
+  mutate(
+    pct_dari_total = round(total_rental_per_hari / sum(df_daily$total_rental_per_hari) * 100, 1)
+  ) %>%
+  select(hari_rental, total_rental_per_hari, pct_dari_total, avg_revenue_per_hari, avg_customers_per_hari) %>%
+  knitr::kable(
+    digits    = 2,
+    col.names = c("Hari", "Total Rental", "% dari Total", "Avg Revenue (USD)", "Avg Customers"),
+    caption   = "Tabel 5. Distribusi Penyewaan per Hari — Peak Day Pattern"
+  ) %>%
+  kableExtra::kable_styling(full_width = TRUE) %>%
+  kableExtra::row_spec(which(df_daily$total_rental_per_hari == max(df_daily$total_rental_per_hari)),
+                       background = "#d5f5e3", color = "#1e8449", bold = TRUE)
+```
+
+```{r plot_daily_pattern, fig.cap="Gambar 4b. Pola Penyewaan per Hari (Peak Day)"}
+df_daily %>%
+  mutate(
+    pct_dari_total = total_rental_per_hari / sum(total_rental_per_hari) * 100,
+    is_peak = total_rental_per_hari == max(df_daily$total_rental_per_hari),
+    hari_display = paste0(as.character(hari_rental), "\n(", total_rental_per_hari, " rental)")
+  ) %>%
+  ggplot(aes(x = hari_rental, y = total_rental_per_hari, fill = is_peak)) +
+  geom_col(width = 0.65, show.legend = FALSE, color = "white") +
+  geom_text(aes(label = paste0(total_rental_per_hari, "\n(", 
+                               round(pct_dari_total, 1), "%)")),
+            vjust = -0.3, size = 3.2, fontface = "bold", color = "#2c3e50") +
+  scale_fill_manual(values = c("FALSE" = "#2980b9", "TRUE" = "#27ae60")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    title    = "Peak Day Analysis: Total Rental per Hari",
+    subtitle = "Pola mingguan — hari mana dengan demand penyewaan tertinggi?",
+    x        = NULL,
+    y        = "Jumlah Rental",
+    caption  = "Sumber: Database Sakila (MySQL)"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title = element_text(face = "bold", size = 12),
+    plot.subtitle = element_text(color = "#7f8c8d", size = 9),
+    axis.text.x = element_text(size = 10)
+  )
+```
+
+## Heatmap: Hour x Day Pattern
+
+```{r plot_heatmap_hourly_daily, fig.cap="Gambar 4c. Heatmap Rental: Jam × Hari Dalam Seminggu"}
+df_heatmap <- df_rental_timing %>%
+  group_by(jam_rental, hari_rental) %>%
+  summarise(total_rental = sum(jumlah_rental), .groups = 'drop')
+
+# Mapping hari ke urutan
+hari_order_full <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+df_heatmap$hari_rental <- factor(df_heatmap$hari_rental, levels = hari_order_full)
+
+df_heatmap %>%
+  ggplot(aes(x = jam_rental, y = hari_rental, fill = total_rental)) +
+  geom_tile(color = "white", size = 0.5) +
+  geom_text(aes(label = total_rental), color = "white", size = 2.5, fontface = "bold") +
+  scale_fill_gradient(low = "#ecf0f1", high = "#c0392b", 
+                      name = "Rental Count",
+                      labels = function(x) sprintf("%.0f", x)) +
+  scale_x_continuous(breaks = seq(0, 23, 2), labels = paste0(sprintf("%02d", seq(0, 23, 2)), ":00")) +
+  labs(
+    title    = "Heatmap Temporal: Kapan Puncak Penyewaan?",
+    subtitle = "Kombinasi jam × hari untuk identifikasi slot waktu premium",
+    x        = "Jam (Hour)",
+    y        = "Hari",
+    caption  = "Sumber: Database Sakila (MySQL)"
+  ) +
+  theme_minimal(base_size = 10) +
+  theme(
+    plot.title = element_text(face = "bold", size = 12),
+    plot.subtitle = element_text(color = "#7f8c8d", size = 9),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 9)
   )
 ```
 
 <div class="interpretasi">
-<h4>👥 Interpretasi — RFM Segmentation</h4>
+<h4>Interpretasi — Rental Timing Pattern Analysis</h4>
 
-**Metodologi:** Setiap pelanggan diberi skor 1–5 pada tiga dimensi (R, F, M) menggunakan *quintile scoring*, lalu dikelompokkan ke dalam 5 segmen berdasarkan kombinasi skor tersebut. Tanggal referensi yang digunakan adalah **15 Februari 2006** (batas akhir data transaksi Sakila).
+**Pola Waktu Penyewaan (Peak Hour & Day):**
 
-**Temuan per Segmen:**
+Dari analisis data temporal, beberapa insight penting muncul:
 
-- <span class="rfm-badge rfm-champions">Champions</span> — Segmen terkecil namun paling bernilai: recency rendah, frekuensi tinggi, dan spending tertinggi. Ini adalah **tulang punggung revenue** Sakila yang harus dijaga loyalitasnya melalui program reward eksklusif.
+1. **Peak Hour Identification:** Berdasarkan grafik Peak Hour, aktivitas transaksi sewa tidak terdistribusi merata, melainkan terkonsentrasi penuh pada pukul 15:00. Pola ini mencerminkan perilaku konsumen yang melakukan peminjaman sepulang dari aktivitas harian atau di waktu senggang malam hari.
 
-- <span class="rfm-badge rfm-loyal">Loyal Customers</span> — Pelanggan dengan frekuensi dan recency baik. Masih aktif dan konsisten; perlu dipertahankan dengan komunikasi reguler dan penawaran relevan.
+2. **Peak Day Pattern:** Pola mingguan jelas terlihat, dengan hari-hari tertentu (<span class="timing-badge timing-normal">Peak Day</span> atau momen *weekend*) menampilkan volume penyewaan yang lebih tinggi. Informasi ini sangat berharga untuk:
+   - **Staffing Optimization:** Alokasikan lebih banyak staff pada hari-hari peak
+   - **Inventory Planning:** Pastikan stok film populer tersedia pada peak days
+   - **Promotional Timing:** Meluncurkan promosi agresif pada masa <span class="timing-badge timing-off-peak">Off-Peak</span> untuk menstimulasi utilitas rental.
 
-- <span class="rfm-badge rfm-potential">Potential Loyalist</span> — Baru aktif tetapi belum terlalu sering rental. Ini adalah **segmen konversi** — dengan nurturing yang tepat (rekomendasi film, diskon pertama) dapat naik ke segmen Loyal atau Champions.
+3. **Weekly Pattern:** Anomali Pola Mingguan: Visualisasi harian menegaskan bahwa hari **Selasa** merupakan masa <span class="timing-badge timing-normal">Peak Day</span> dengan lonjakan volume sewa yang mendominasi porsi distribusi mingguan. Informasi spesifik ini menggugurkan asumsi umum bahwa sewa hanya terjadi di hari Sabtu/Minggu, sehingga strategi operasional logistik pengiriman DVD baru wajib disesuaikan dengan hari puncak riil ini.
 
-- <span class="rfm-badge rfm-atrisk">At Risk</span> — Pernah aktif namun kini jarang muncul. **Prioritas retensi:** kampanye *win-back* seperti email pengingat, diskon, atau promosi film baru sangat diperlukan untuk segmen ini.
+**Rekomendasi Aksi:**
 
-- <span class="rfm-badge rfm-lost">Lost / Hibernating</span> — Pelanggan tidak aktif dalam waktu lama. Upaya reakuisisi memerlukan biaya lebih tinggi; perlu dipertimbangkan apakah lebih efisien mengakuisisi pelanggan baru.
-
-Berdasarkan hasil pemodelan dan visualisasi data RFM, beberapa insight strategis yang dapat dirangkum adalah sebagai berikut:
-
-1. **Validasi Kluster Visual:** Melalui *scatter plot* distribusi nilai RFM, terlihat pemisahan kelompok pelanggan yang cukup jelas. Kelompok <span class="rfm-badge rfm-champions">Champions</span> mengelompok secara konsisten di area **kiri-atas** (menandakan *Recency* yang sangat baru dan *Frequency* yang tinggi). Sementara itu, segmen <span class="rfm-badge rfm-lost">Lost / Hibernating</span> terlihat menumpuk di area **kiri-bawah**, mencerminkan kelompok pelanggan dengan frekuensi rental rendah yang rentan beralih menjadi sepenuhnya tidak aktif jika tidak segera distimulasi.
-
-2. **Anatomi Segmen Terbesar (Potensi Menengah):** Mayoritas basis pelanggan Sakila berada pada kategori <span class="rfm-badge rfm-potential">Potential Loyalist</span> dan *Loyal Customers*. Mereka memiliki *Recency* yang baik (aktif baru-baru ini), namun frekuensi rentalnya belum maksimal. Ini adalah peluang besar untuk dikonversi menjadi *Champions* melalui program loyalitas atau promosi berbasis kurasi film terlaris.
-
-3. **Sinyal Bahaya Kritis (At Risk):** Kelompok <span class="rfm-badge rfm-atrisk">At Risk</span> terlihat jelas di area **kanan-atas** grafik. Posisi ini mengonfirmasi adanya risiko retensi yang kritis—mereka adalah pelanggan yang memiliki riwayat *Frequency* tinggi di masa lalu, namun nilai *Recency*-nya bergerak menjauh ke kanan (sudah lama tidak merental). Kelompok berharga ini membutuhkan kampanye *win-back* atau insentif khusus berupa penawaran terbatas sesegera mungkin sebelum mereka berhenti berlangganan secara total.
+-   **Promotional Strategy:** Menawarkan diskon khusus atau skema *bundling* pada masa <span class="timing-badge timing-off-peak">Off-Peak Hours</span> untuk meratakan distribusi demand.
+-   **Email Campaign Timing:** Mengirimkan *newsletter* promosi tepat 1-2 jam sebelum memasuki masa <span class="timing-badge timing-peak-hour">Peak Hour</span> demi memaksimalkan *engagement*.
+-   **Dynamic Pricing:** Mempertimbangkan penerapan *surge pricing* pada masa <span class="timing-badge timing-peak-hour">Peak Hour</span> atau tarif diskon (*discounted rate*) pada masa sepi.
+-   **Operational Planning:** Meningkatkan pasokan inventori film 2-3 hari sebelum siklus <span class="timing-badge timing-normal">Peak Day</span> mingguan dimulai.
+-   **Staffing:** Menyusun jadwal giliran kerja (*shift*) dengan jumlah kru maksimal pada jam dan hari-hari puncak aktivitas.
 </div>
 
----
+------------------------------------------------------------------------
 
 # Kesimpulan
 
-<div class="callout-box success">
-
+::: {.callout-box .success}
 **Ringkasan Tiga Dimensi Analisis:**
 
-### 🎭 Actor ROI
-- **Efisiensi vs Kuantitas:** Kuantitas produksi film bukan penentu tunggal ROI; aktor dengan produktivitas tinggi secara absolut belum tentu memiliki rata-rata pendapatan per film yang efisien.
-- **Aset Strategis Utama:** Aktor yang mencatatkan rata-rata *revenue per film* tinggi (di atas USD 70+) adalah penggerak utama margin keuntungan (*profit margin drivers*) yang sesungguhnya bagi Sakila.
-- **Rekomendasi Konten:** Kontrak pengadaan hak siar ke depan harus memprioritaskan aktor dengan efisiensi tinggi guna menekan biaya inventori sekaligus memaksimalkan utilitas penyewaan.
+### Actor ROI
 
-### 🌍 Market Concentration
-- Pasar Sakila **sangat terkonsentrasi**: `r top5_pct`% revenue berasal dari 5 negara teratas.
-- **India dan China** mendominasi, namun negara-negara mid-tier menunjukkan potensi *untapped* yang signifikan dari sisi rata-rata spending per pelanggan.
+-   **Efisiensi vs Kuantitas:** Kuantitas produksi film bukan penentu
+    tunggal ROI; aktor dengan produktivitas tinggi secara absolut belum
+    tentu memiliki rata-rata pendapatan per film yang efisien.
+-   **Aset Strategis Utama:** Aktor yang mencatatkan rata-rata *revenue
+    per film* tinggi (di atas USD 70+) adalah penggerak utama margin
+    keuntungan (*profit margin drivers*) yang sesungguhnya bagi Sakila.
+-   **Rekomendasi Konten:** Kontrak pengadaan hak siar ke depan harus
+    memprioritaskan aktor dengan efisiensi tinggi guna menekan biaya
+    inventori sekaligus memaksimalkan utilitas penyewaan.
 
-### 👥 RFM Segmentation
-- **Champions** adalah segmen bernilai tertinggi; strategi retensi khusus wajib disiapkan untuk menjaga loyalitas mereka.
-- Segmen **At Risk** memerlukan kampanye *win-back* segera sebelum beralih ke status Lost.
-- **Potential Loyalist** adalah peluang konversi dengan biaya rendah yang bisa mendongkrak revenue jangka menengah.
+### Inventory Efficiency
 
-**Rekomendasi Terpadu:**
-- Investasikan di konten dari aktor ber-ROI tinggi per film.
-- Alokasikan anggaran pemasaran ke India, China, AS, sambil membuka program akuisisi di pasar mid-tier.
-- Implementasikan sistem CRM berbasis skor RFM untuk personalisasi komunikasi dengan setiap segmen pelanggan.
-</div>
+-   **Masalah Dead Stock:** Ditemukan sejumlah aset film yang masuk dalam kategori *dead stock* (memiliki nilai *utilization rate* = 0), yang membebani biaya penyimpanan tanpa menghasilkan timbal balik profit.
+-   **Optimalisasi Sirkulasi:** Toko tertentu menunjukkan efisiensi perputaran yang berbeda, memerlukan sistem rotasi inventori lintas cabang yang lebih dinamis.
 
----
+### Rental Timing Pattern
+
+-   **Peak Hour/Day Utilization:** Pola temporal penyewaan menunjukkan konsentrasi aktivitas pada jam-jam dan hari-hari spesifik yang dapat dimanfaatkan untuk optimasi operasional.
+-   **Revenue Optimization:** Dengan memahami timing pattern, Sakila dapat menerapkan dynamic pricing, targeted promotions, dan inventory planning yang lebih efisien.
+-   **Customer Experience:** Staffing dan sistem dapat disesuaikan untuk memberikan layanan terbaik pada peak times sambil memanfaatkan off-peak untuk maintenance/preparation.
+
+**Rekomendasi Terpadu:** 
+
+1.  **Aksi Penyelamatan Efisiensi:** Segera lakukan rotasi fisik inventori *dead stock* antar-cabang sebelum memutuskan melakukan pembelian keping DVD baru, serta jalankan program bundling khusus film sepi pada waktu *Off-Peak*.
+2.  **Investasi Konten Tepat Sasaran:** Investasikan anggaran pengadaan film baru pada aktor-aktor yang terbukti memiliki nilai ROI tinggi per judul film (*Sweet Spot* produksi).
+3.  **Temporal Marketing Strategy:** Implementasikan kampanye pemasaran terprogram, seperti pengiriman *newsletter* 1-2 jam sebelum *Peak Hour*, serta pertimbangan penerapan tarif dinamis (*surge/discount pricing*).
+:::
+
+------------------------------------------------------------------------
 
 <p class="footer-note">
-  Laporan dibuat menggunakan R Markdown &bull; Database Sakila (MySQL) &bull;
-  `r format(Sys.Date(), "%d %B %Y")`
+
+Laporan dibuat menggunakan R Markdown • Database Sakila (MySQL) •
+`r format(Sys.Date(), "%d %B %Y")`
+
 </p>
-
-
