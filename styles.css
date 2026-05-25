@@ -25,7 +25,7 @@ h1, h2, h3, h4 {
 }
 
 h1.title {
-  font-size: 2.2rem;
+  font-size: 2.7rem;
   color: #2980b9;
   border-bottom: 3px solid #2980b9;
   padding-bottom: 12px;
@@ -39,22 +39,27 @@ h4.date {
 
 /* ==== Pengaturan Heading ==== */
 h1 {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   border-left: 5px solid #2980b9;
   padding-left: 12px;
   margin-top: 2rem;
 }
 
 h2 {
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   color: #2471a3;
   margin-top: 1.5rem;
 }
 
 h3 {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   color: #1f618d;
   margin-top: 1.2rem;
+}
+
+/* Jika elemen pre berada tepat setelah h1, h2, atau h3, nolkankan jarak atasnya */
+h1 + pre, h2 + pre, h3 + pre {
+  margin-top: -2px !important;
 }
 
 /* ==== Untuk Kode Chunks ==== */
@@ -87,10 +92,10 @@ code:not(pre code) {
   border-radius: 6px;
   padding: 14px 18px;
   margin: 18px 0;
-  font-size: 0.95em;
+  font-size: 0.95em;    
 }
 
-.callout-box.success {
+.callout-box.insight {
   background: linear-gradient(135deg, #eafaf1, #d5f5e3);
   border-left-color: #27ae60;
 }
@@ -111,6 +116,7 @@ code:not(pre code) {
   padding: 16px 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border-top: 4px solid #2980b9;
+  border-bottom: 4px solid #2980b9;
   text-align: center;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
@@ -118,6 +124,7 @@ code:not(pre code) {
 .metric-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
 }
 
 .metric-card .metric-value {
@@ -295,10 +302,8 @@ p.caption {
   margin-bottom: 8px;
 }
 
-/* ==== KHUSUS BADGES SEGMENTASI RFM ==== */
-
-/* Properti Dasar untuk Semua Badge */
-.rfm-badge {
+/* ==== PROPERTI DASAR BADGE TIMING (Sudah ada di filemu) ==== */
+.timing-badge {
   display: inline-block;
   padding: 4px 10px;
   font-size: 12px;
@@ -309,43 +314,83 @@ p.caption {
   vertical-align: baseline;
   border-radius: 4px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease-in-out; 
+}
+
+.timing-badge:hover {
+  cursor: pointer;            /* Mengubah kursor menjadi bentuk tangan penunjuk */
+  transform: translateY(-1px); /* Efek sedikit terangkat ke atas */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Memberikan bayangan tipis */
+}
+
+/* 1. Peak Hour (Contoh Warna Merah/Orange) */
+.timing-peak-hour {
+  background-color: #e74c3c;
+  color: #ffffff;
+}
+.timing-peak-hour:hover {
+  background-color: #c0392b; /* Warna merah yang lebih gelap saat di-hover */
+}
+
+/* 2. Off-Peak Hour (Contoh Warna Biru) */
+.timing-off-peak {
+  background-color: #3498db;
+  color: #ffffff;
+}
+.timing-off-peak:hover {
+  background-color: #2980b9; /* Warna biru yang lebih gelap saat di-hover */
+}
+
+/* 3. Normal Hour / Transit (Contoh Warna Hijau atau Abu-abu) */
+.timing-normal {
+  background-color: #2ecc71;
+  color: #ffffff;
+}
+.timing-normal:hover {
+  background-color: #27ae60; /* Warna hijau yang lebih gelap saat di-hover */
+}
+
+/* ==== PROPERTI DASAR BADGE DATABASE ==== */
+.db-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-family: 'Fira Code', monospace; /* Menggunakan font code agar terkesan teknis */
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 4px;
   letter-spacing: 0.3px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.2s ease-in-out;
 }
 
-/* Warna Spesifik per Segmen sesuai Kode Warna Analisismu */
-
-/* 1. Champions (Hijau) */
-.rfm-badge.rfm-champions {
-  background-color: #d5f5e3;
-  color: #1e8449;
-  border: 1px solid #abebc6;
+/* Efek Hover Global untuk Badge Database */
+.db-badge:hover {
+  cursor: pointer;
+  transform: scale(1.03); /* Sedikit membesar secara halus */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
 
-/* 2. Loyal Customers (Biru Tua) */
-.rfm-badge.rfm-loyal {
-  background-color: #eaf2fb;
-  color: #1a5276;
-  border: 1px solid #a9cce3;
+/* ==== VARIASI UNTUK NAMA TABEL (Biru Indigo Tech) ==== */
+.db-table {
+  background-color: #2c3e50;
+  color: #ffffff;
+  border: 1px solid #34495e;
+}
+.db-table:hover {
+  background-color: #1a252f; /* Menggelap saat di-hover */
 }
 
-/* 3. Potential Loyalist (Kuning/Emas Tua) */
-.rfm-badge.rfm-potential {
-  background-color: #fef9e7;
-  color: #b7950b;
-  border: 1px solid #f9e79f;
+/* ==== VARIASI UNTUK NAMA KOLOM / ATRIBUT (Cool Gray Pastel) ==== */
+.db-column {
+  background-color: #ebf5fb;
+  color: #2980b9;
+  border: 1px solid #d4e6f1;
 }
-
-/* 4. At Risk (Merah) */
-.rfm-badge.rfm-atrisk {
-  background-color: #fde8e8;
-  color: #c0392b;
-  border: 1px solid #f5b7b1;
-}
-
-/* 5. Lost / Hibernating (Abu-abu) */
-.rfm-badge.rfm-lost {
-  background-color: #f2f4f4;
-  color: #717d7e;
-  border: 1px solid #d5dbdb;
+.db-column:hover {
+  background-color: #d4e6f1;
+  color: #21618c;
 }
