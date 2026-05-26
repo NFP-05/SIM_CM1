@@ -10,7 +10,7 @@ Repositori ini berisi laporan analisis bisnis mendalam terhadap sistem manajemen
 
 # 🚀 Fitur Utama & Cakupan Analisis
 
-Laporan ini mencakup empat pilar analisis strategis untuk mengoptimalkan profitabilitas dan efisiensi operasional toko Sakila:
+Laporan ini mencakup tiga analisis strategis untuk mengoptimalkan profitabilitas dan efisiensi operasional toko pada Database Sakila:
 
 1. **Actor ROI Analysis (Manajemen Konten):**
    Mengidentifikasi jajaran aktor terpopuler yang menghasilkan akumulasi pendapatan (*gross revenue*) tertinggi, sekaligus memetakan efisiensi biaya pengadaan berdasarkan rata-rata pendapatan per judul film (*Sweet Spot* produksi).
